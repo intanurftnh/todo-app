@@ -1,14 +1,13 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Icon } from 'react-icons-kit';
 import { trash } from 'react-icons-kit/feather/trash'
 import { edit2 } from 'react-icons-kit/feather/edit2'
 import { removeTodo, handleCheckbox } from '../redux/todoapp/actions';
 
-export const Todos = ({handleEditClick, editFormVisibility}) => {
+export const Todos = ({handleEditClick, editFormVisibility, todos}) => {
   const dispatch = useDispatch();
-
-  const todos = useSelector((state)=>state.operationsReducer);
+  
   return todos.map((todo)=>(
     <div key={todo.id} className='d-flex justify-content-between todo-box border-bottom border-white py-2'>
         <div className='d-flex content'>
@@ -29,5 +28,6 @@ export const Todos = ({handleEditClick, editFormVisibility}) => {
               )}
         </div>
     </div>
+    
   ))
 }

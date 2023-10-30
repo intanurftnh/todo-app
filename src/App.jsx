@@ -8,25 +8,25 @@ import FilterToDo from './components/FilterToDo';
 function App() {
   const dispatch = useDispatch();
   const todos = useSelector((state)=>state.operationsReducer);
-  const [todo, setTodo] = useState(todos)
+  const [filter, setFilter] = useState('all');
 
-  useEffect(() => {
-    console.log(todo)
-  }, [todo])
+  const handleFilterChange = (selectedFilter) => {
+    setFilter(selectedFilter);
+  };
 
-  const FilterActive = (e) => {
-    let filteredData = null
-    if ( e.toLowerCase() === 'active') {
-      filteredData =  todo.filter( e => e.completed === false )
+  
+
+  const filterTodos = todos.filter((todo) => {
+    if (filter === 'active') {
+      return !todo.completed;
+    } else if (filter === 'complete') {
+      return todo.completed;
+    } else {
+      return true;
     }
-    if ( e.toLowerCase() === 'complete') {
-      filteredData =  todo.filter( e => e.completed === true )
-    }
-    if ( e.toLowerCase() === 'all') {
-      filteredData =  todo
-    }
-    setTodo(filteredData)
-  }
+  });
+  
+
 
   const [editFormVisibility, setEditFormVisibility]=useState(false);
   const [editTodo, setEditTodo]=useState('');
@@ -56,18 +56,22 @@ function App() {
         <p className="fs-5">Note down your work today to be more productive</p>
       </div>
 
+
       <Form editFormVisibility={editFormVisibility} editTodo={editTodo}
       cancelUpdate={cancelUpdate}/>
       
       <div className='container rounded-4 mx-auto p-4 m-4' style={{backgroundColor: "rgb(180, 228, 180)", width: '75%'}}>
-      <FilterToDo FilterActive = { FilterActive }/>
+
+      <FilterToDo filter={filter} handleFilterChange={handleFilterChange} />
 
       <div className='my-2 py-3'>
-        <Todos handleEditClick={handleEditClick} editFormVisibility={editFormVisibility}/>
+        <Todos todos={filterTodos} handleEditClick={handleEditClick} editFormVisibility={editFormVisibility}/>
       </div>
-        
-      <button className='btn btn-outline-success btn-sm delete-all'
+      
+      <div className='d-grid'>
+        <button className='btn btn-outline-success btn-sm delete-all'
         onClick={()=>dispatch(deleteAll())}>Delete All</button>
+      </div>
       </div>
 
     </div>
